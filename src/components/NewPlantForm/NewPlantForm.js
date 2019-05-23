@@ -23,6 +23,14 @@ class NewPlantForm extends Component {
         });
     }
 
+    componentDidMount() {
+        // this.getElements();
+        this.props.dispatch({
+          type: 'GET_PLANTS'
+        })
+        console.log('This is in NewPlantForm,');
+      }
+
     addNewPlant = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'ADD_PLANT', payload: this.state.newPlant })
