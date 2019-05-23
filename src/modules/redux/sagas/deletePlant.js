@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function* deletePlant(action) {
     try {
-        yield axios.delete(`/api/plant/`); // 
+        yield axios.delete(`/api/plant/?id=${action.payload}`); // 
         yield put({
             type: 'GET_FRUIT'
         });
