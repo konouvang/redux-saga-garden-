@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
+import lightGreen from '@material-ui/core/colors/lightGreen';
+
+const lightGreenTheme = createMuiTheme({ palette: { primary: lightGreen } })
 
 const mapStateToProps = reduxState => ({
     reduxState,
@@ -49,7 +55,9 @@ class NewPlantForm extends Component {
                 <pre>{JSON.stringify(this.state)}</pre>
                 <form onSubmit={this.addNewPlant}>
                     <input type='text' value={this.state.newPlant.name} onChange={this.handleNameChange} />
-                    <input type='submit' value='Add New Plant' />
+                    <MuiThemeProvider theme={lightGreenTheme}>
+                    <Button variant="contained" color="primary" type='submit'>Add New Plant</Button>
+                    </MuiThemeProvider>
                 </form>
             </div>
         );

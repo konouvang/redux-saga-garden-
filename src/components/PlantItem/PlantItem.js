@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
+import brown from '@material-ui/core/colors/brown';
+
+const brownTheme = createMuiTheme({ palette: { primary: brown } })
 
 class PlantItem extends Component {
     deletePlant = () => {
@@ -21,7 +28,9 @@ class PlantItem extends Component {
         return (
             <li>
                 <span>{this.props.plantItem.name}</span>
-                <button onClick={this.deletePlant}>Remove</button>
+                <MuiThemeProvider theme={brownTheme}>
+                <IconButton aria-label="Delete" color="primary" onClick={this.deletePlant}><DeleteIcon/></IconButton>
+                </MuiThemeProvider>
             </li>
         )
     }

@@ -1,13 +1,29 @@
 import React from 'react';
 import Garden from './components/Garden/Garden';
+import AppBar from '@material-ui/core/AppBar';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
+import lightGreen from '@material-ui/core/colors/lightGreen';
+import Toolbar from '@material-ui/core/Toolbar'
+import TypoGraphy from '@material-ui/core/Typography'
 
-import './App.css';
+const lightGreenTheme = createMuiTheme({ palette: { primary: lightGreen } })
+
+
 
 const App = () => (
   <div className="App">
-    <header className="App-header">
-      <h1>Welcome to your garden!</h1>
-    </header>
+    <MuiThemeProvider theme={lightGreenTheme}>
+      <AppBar color="primary" position="static">
+        <Toolbar>
+          <TypoGraphy variant="h3"
+              color="inherit"
+            >
+          Welcome to your garden!
+          </TypoGraphy>
+       </Toolbar>
+      </AppBar>
+    </MuiThemeProvider>
     <Garden />
   </div>
 );
