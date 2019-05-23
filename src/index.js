@@ -32,6 +32,18 @@ function* getPlants(){
   }
 }
 
+// function* getPlantsID(){
+//   try {
+//     const plantResponse = yield axios.get(`/api/plant/details/id=${action.payload}`);
+//     yield put ({
+//       type: 'ADD_PLANT_ID',
+//       payload: plantResponse.data
+//     })
+//   } catch (err){
+//     console.log('error HELP:', err)
+//   }
+// }
+
 function* plantSaga(){
   yield takeEvery('GET_PLANTS', getPlants);
   yield takeEvery('POST_PLANT', postPlant);
