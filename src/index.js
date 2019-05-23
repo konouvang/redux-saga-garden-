@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import logger from 'redux-logger';
-import createSagaMiddleware from 'redux-saga';
-import axios from 'axios';
-import { takeEvery, put } from 'redux-saga/effects';
-
-
 import App from './App';
+import createSagaMiddleware from 'redux-saga';
+import { takeEvery, put } from 'redux-saga/effects';
+import logger from 'redux-logger';
+import deletePlant from './modules/redux/sagas/deletePlant';
+import axios from 'axios';
 
 // this startingPlantArray should eventually be removed
 
@@ -34,8 +33,10 @@ function* getPlants(){
 }
 
 function* plantSaga(){
-  yield takeEvery('GET_PLANTS', getPlants)
-  yield takeEvery('ADD_PLANT', postPlant)
+  yield takeEvery('GET_PLANTS', getPlants);
+  yield takeEvery('ADD_PLANT', postPlant);
+  yield takeEvery('DELETE_PLANT', deletePlant);
+
 }
 
 function* postPlant(action) {
@@ -58,6 +59,6 @@ const store = createStore(
   applyMiddleware(sagaMiddleware, logger)
 );
 
-sagaMiddleware.run(plantSaga)
+sagaMiddleware.run(plantSaga);
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('react-root'));
