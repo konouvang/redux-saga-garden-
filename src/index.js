@@ -2,35 +2,48 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import logger from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
 import axios from 'axios';
 import { takeEvery, put } from 'redux-saga/effects';
-import createSagaMiddleware from 'redux-saga';
 
 
 import App from './App';
 
 // this startingPlantArray should eventually be removed
-const startingPlantArray = [
-  { id: 1, name: 'Rose' },
-  { id: 2, name: 'Tulip' },
-  { id: 3, name: 'Oak' }
-];
 
-const plantList = (state = startingPlantArray, action) => {
+const plantList = (state = [], action) => {
   switch (action.type) {
     case 'ADD_PLANT':
-      return [ ...state, action.payload ]
+      return action.payload
     default:
       return state;
   }
 };
+
+function* getPlants(){
+  try {
+    const plantResponse = yield axios.get(`/api/plant`);
+    yield put ({
+      type: 'ADD_PLANT',
+      payload: plantResponse.data
+    })
+  } catch (err){
+    console.log('error HELP:', err)
+  }
+}
+
+function* plantSaga(){
+  yield takeEvery('GET_PLANTS', getPlants),
+  yield takeEvery('ADD_PLANT', postPlant)
+}
 
 function* postPlant(action) {
   console.log(action.payload);
   try {
       yield axios.post('/api/plant', action.payload);
       yield put({
-          type: 'FETCH_PLANTS'
+          type: 'GET_PLANTS'
       });
       console.log(action.payload);
   } catch (err) {
@@ -38,21 +51,13 @@ function* postPlant(action) {
   }
 }
 
-function* watcherSaga() {
-  yield takeEvery('ADD_ELEMENT', postPlant);
-
-}
-
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
-  combineReducers({ 
-    plantList
-  
-  }),
-  applyMiddleware(sagaMiddleware),
+  combineReducers({plantList}),
+  applyMiddleware(sagaMiddleware, logger)
 );
 
-sagaMiddleware.run(watcherSaga);
+sagaMiddleware.run(plantSaga)
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('react-root'));
