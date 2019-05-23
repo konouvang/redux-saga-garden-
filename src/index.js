@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-
 import App from './App';
+import createSagaMiddleware from 'redux-saga';
+import { takeEvery } from 'redux-saga/effects';
+import logger from 'redux-logger';
+import deletePlant from './modules/redux/sagas/deletePlant';
 
 // this startingPlantArray should eventually be removed
 const startingPlantArray = [
@@ -11,6 +14,10 @@ const startingPlantArray = [
   { id: 2, name: 'Tulip' },
   { id: 3, name: 'Oak' }
 ];
+
+function* rootSaga(){
+  yield takeEvery('DELETE_PLANT', deletePlant);
+}
 
 const plantList = (state = startingPlantArray, action) => {
   switch (action.type) {
@@ -21,8 +28,16 @@ const plantList = (state = startingPlantArray, action) => {
   }
 };
 
+const sagaMiddleware = createSagaMiddleware();
+
 const store = createStore(
-  combineReducers({ plantList }),
+    combineReducers({
+        plantList,
+    }),
+    // Add sagaMiddleware to our store
+    applyMiddleware(sagaMiddleware, logger),
 );
+
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('react-root'));
