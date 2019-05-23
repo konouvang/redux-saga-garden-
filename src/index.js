@@ -33,11 +33,6 @@ function* getPlants(){
   }
 }
 
-function* plantSaga(){
-  yield takeEvery('GET_PLANTS', getPlants),
-  yield takeEvery('ADD_PLANT', postPlant)
-}
-
 function* postPlant(action) {
   console.log(action.payload);
   try {
@@ -50,6 +45,12 @@ function* postPlant(action) {
       console.log('error HELP:', err);
   }
 }
+
+function* plantSaga(){
+  yield takeEvery('GET_PLANTS', getPlants)
+  yield takeEvery('ADD_PLANT', postPlant)
+}
+
 
 const sagaMiddleware = createSagaMiddleware();
 
