@@ -34,7 +34,21 @@ function* getPlants(){
 }
 
 function* plantSaga(){
-  yield takeEvery('GET_PLANTS', getPlants)
+  yield takeEvery('GET_PLANTS', getPlants),
+  yield takeEvery('ADD_PLANT', postPlant)
+}
+
+function* postPlant(action) {
+  console.log(action.payload);
+  try {
+      yield axios.post('/api/plant', action.payload);
+      yield put({
+          type: 'GET_PLANTS'
+      });
+      console.log(action.payload);
+  } catch (err) {
+      console.log('error HELP:', err);
+  }
 }
 
 const sagaMiddleware = createSagaMiddleware();
