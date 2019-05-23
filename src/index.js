@@ -32,9 +32,9 @@ function* getPlants() {
   }
 }
 
-function* updatePlants() {
+function* updatePlants(action) {
   try {
-    const plantResponse = yield axios.put('/api/plant');
+    const plantResponse = yield axios.put('/api/plant', action.payload);
     yield put({
       type: 'GET_PLANTS',
       payload: plantResponse.data

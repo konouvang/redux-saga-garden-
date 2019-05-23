@@ -47,7 +47,7 @@ router.post('/', (req, res) => {
 router.put('/', (req, res) => {
   const updatedPlant = req.body;
 
-  const queryText = `UPDATE table_name
+  const queryText = `UPDATE plant
   SET "name" = $1, 
   "kingdom" = $2, 
   "clade" = $3, 
