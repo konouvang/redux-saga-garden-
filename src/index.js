@@ -34,7 +34,7 @@ function* getPlants(){
 
 function* plantSaga(){
   yield takeEvery('GET_PLANTS', getPlants);
-  yield takeEvery('ADD_PLANT', postPlant);
+  yield takeEvery('POST_PLANT', postPlant);
   yield takeEvery('DELETE_PLANT', deletePlant);
 
 }
