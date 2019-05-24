@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import mapStateToProps from '.../mapStateToProps';
 
 class Details extends Component {
     render(){
@@ -18,5 +17,9 @@ class Details extends Component {
         )
     }
 }
+
+const mapStateToProps = reduxState => ({
+    reduxState,
+});
 
 export default connect(mapStateToProps)(Details);
