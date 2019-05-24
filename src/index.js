@@ -20,14 +20,14 @@ const plantList = (state = [], action) => {
   }
 };
 
-function* getPlants(){
+function* getPlants() {
   try {
     const plantResponse = yield axios.get(`/api/plant`);
-    yield put ({
+    yield put({
       type: 'ADD_PLANT',
       payload: plantResponse.data
     })
-  } catch (err){
+  } catch (err) {
     console.log('error HELP:', err)
   }
 }
@@ -44,30 +44,43 @@ function* getPlants(){
 //   }
 // }
 
-function* plantSaga(){
+function* updatePlants() {
+  try {
+    const plantResponse = yield axios.put('/api/plant');
+    yield put({
+      type: 'GET_PLANTS',
+      payload: plantResponse.data
+    })
+  } catch (err) {
+    console.log(`error HELP: ${err}`)
+  }
+}
+
+function* plantSaga() {
   yield takeEvery('GET_PLANTS', getPlants);
   yield takeEvery('POST_PLANT', postPlant);
   yield takeEvery('DELETE_PLANT', deletePlant);
+  yield takeEvery('UPDATE_PLANT', updatePlants);
 
 }
 
 function* postPlant(action) {
   console.log(action.payload);
   try {
-      yield axios.post('/api/plant', action.payload);
-      yield put({
-          type: 'GET_PLANTS'
-      });
-      console.log(action.payload);
+    yield axios.post('/api/plant', action.payload);
+    yield put({
+      type: 'GET_PLANTS'
+    });
+    console.log(action.payload);
   } catch (err) {
-      console.log('error HELP:', err);
+    console.log('error HELP:', err);
   }
 }
 
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
-  combineReducers({plantList}),
+  combineReducers({ plantList }),
   applyMiddleware(sagaMiddleware, logger)
 );
 
